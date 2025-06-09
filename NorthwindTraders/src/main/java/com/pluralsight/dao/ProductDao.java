@@ -28,7 +28,7 @@ public class ProductDao {
 
     public List<Customer> getAllCustomers() {
         try (var connection = dataSource.getConnection();
-             var preparedStatement = connection.prepareStatement("SELECT * FROM customers");
+             var preparedStatement = connection.prepareStatement("SELECT * FROM customers ORDER BY Country");
              var resultSet = preparedStatement.executeQuery()) {
 
             List<Customer> customers = new LinkedList<>();
