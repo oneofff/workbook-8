@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import com.pluralsight.model.Actor;
+import com.pluralsight.model.Film;
 
 import java.util.List;
 import java.util.Scanner;
@@ -12,10 +13,25 @@ public class Main {
 
     public static void main(String[] args) {
         exercise7();
-        exercise8();
+        exercise8_1();
+        exercise8_2();
     }
 
-    private static void exercise8() {
+    private static void exercise8_2() {
+        System.out.println("Enter your actor id:");
+        Scanner scanner = new Scanner(System.in);
+        int actorId = scanner.nextInt();
+        scanner.close();
+        List<Film> actors = dataManager.getFilmsByActorId(actorId);
+        if (actors.isEmpty()) return;
+        System.out.println("Films featuring actor with id " + actorId + ":");
+        for (Film film : actors) {
+            System.out.println("-".repeat(20));
+            System.out.println(film);
+        }
+    }
+
+    private static void exercise8_1() {
         System.out.println("Enter your favorite actor's last name:");
         Scanner scanner = new Scanner(System.in);
         String lastName = scanner.nextLine();
@@ -26,6 +42,8 @@ public class Main {
             System.out.println("-".repeat(20));
             System.out.println(actor);
         }
+
+
     }
 
     private static void exercise7() {
