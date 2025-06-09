@@ -1,31 +1,56 @@
 package com.pluralsight;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
-import com.pluralsight.model.Product;
+import com.pluralsight.dao.ProductDao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/northwind");
-        dataSource.setUser(args[0]);
-        dataSource.setPassword(args[1]);
+    private static final ProductDao productDao = new ProductDao();
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM products");
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                System.out.println("-".repeat(20));
-                Product product = new Product(resultSet);
-                System.out.println(product);
+    public static void main(String[] args) {
+
+        boolean running = true;
+        while (running) {
+            displayMenu();
+            Scanner scanner = new Scanner(System.in);
+            int option = scanner.nextInt();
+
+
+            switch (option) {
+                case 1:
+                    displayAllProducts();
+                    break;
+                case 2:
+                    displayAllCustomers();
+                    break;
+                case 0:
+                    running = false;
+                    System.out.println("Exiting the application.");
+                    break;
+                default:
+                    System.out.println("Invalid option selected.");
             }
-        } catch (SQLException e) {
-            System.out.println("Error connecting to database: " + e.getMessage());
         }
+    }
+
+    private static void displayAllCustomers() {
+        productDao.getAllCustomers().forEach(customer -> {
+            System.out.println(customer);
+            System.out.println("========================================");
+        });
+    }
+
+    private static void displayMenu() {
+        System.out.println("1) Display all products\n" +
+                "2) Display all customers\n" +
+                "0) Exit\n" +
+                "Select an option: ");
+    }
+
+    public static void displayAllProducts() {
+        productDao.getAllProducts().forEach(product -> {
+            System.out.println(product);
+            System.out.println("========================================");
+        });
     }
 }
