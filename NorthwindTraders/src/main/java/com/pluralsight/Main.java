@@ -7,18 +7,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/northwind");
-        dataSource.setUser("root");
-        dataSource.setPassword("1111");
+        dataSource.setUser(args[0]);
+        dataSource.setPassword(args[1]);
 
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT * FROM products ");
-            ResultSet resultSet = preparedStatement.executeQuery();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM products");
+             ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 System.out.println("-".repeat(20));
                 Product product = new Product(resultSet);
