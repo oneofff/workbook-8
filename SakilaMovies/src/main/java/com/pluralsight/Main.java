@@ -1,11 +1,34 @@
 package com.pluralsight;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+import com.pluralsight.model.Actor;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
+    private static final DataManager dataManager = DataManager.getDataManager();
+
     public static void main(String[] args) {
+        exercise7();
+        exercise8();
+    }
+
+    private static void exercise8() {
+        System.out.println("Enter your favorite actor's last name:");
+        Scanner scanner = new Scanner(System.in);
+        String lastName = scanner.nextLine();
+        List<Actor> smith = dataManager.getActorsByLastName(lastName);
+        if (smith.isEmpty()) return;
+        System.out.println("Actors with last name" + lastName + ":");
+        for (Actor actor : smith) {
+            System.out.println("-".repeat(20));
+            System.out.println(actor);
+        }
+    }
+
+    private static void exercise7() {
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/sakila");
         System.out.println(System.getenv("DB_USER"));
